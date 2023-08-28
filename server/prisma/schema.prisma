@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Usuario {
-  ID          Int
+  ID          Int   @id @default(autoincrement())
   username    String
   password    String
   name        String
@@ -22,15 +22,17 @@ model Usuario {
 }
 
 model Estacionamientos {
-  ID          Int
+  ID          Int     @id @default(autoincrement())
   adress      String
   type        String
   capacity    Int
 }
 
 model Reservas {
-  ID          Int
+  ID          Int     @id @default(autoincrement())
+  user        Usuario @relation(fields: [userId], references: [ID])
   userId      Int
+  parking     Estacionamientos @relation(fields: [parkingID], references: [ID])
   parkingID   Int
   resdate     DateTime
   resduration Int
