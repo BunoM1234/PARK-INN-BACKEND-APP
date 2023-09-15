@@ -15,7 +15,6 @@ model Usuario {
   name     String
   surname  String
   mail     String
-  regdate  DateTime
   reservas Reservas[]
 }
 

@@ -2,13 +2,14 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const express = require("express");
 const mysql = require('mysql')
-
-const PORT = process.env.PORT || 3001;
+const bodyParser = require('body-parser');
+const PORT = process.env.PORT || 3000;
 require('dotenv').config()
 // const mysql = require('mysql2')
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 const app = express();
+app.use(bodyParser.json());
 
 app.get("/api", (req, res) => {
   res.json({ message: "Hola desde el servidor!" });
@@ -17,11 +18,18 @@ app.get("/api", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en el puerto: ${PORT}`);
 });
+
 app.post('/CreateUser', async (req, res) => {
+  const {username, password, name, surname, mail} = req.body; 
   try {
-    const userData = req.body; // Asegúrate de que req.body contenga los datos necesarios para crear un usuario
     const user = await prisma.Usuario.create({
-      data: userData, // Pasamos los datos del usuario
+      data: {
+        "username": username,
+        "password": password,
+        "name": name,
+        "surname": surname,
+        "mail": mail
+      } // Pasamos los datos del usuario
     });
     res.json(user);
   } catch (error) {
