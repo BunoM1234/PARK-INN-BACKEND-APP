@@ -38,4 +38,20 @@ app.post('/CreateUser', async (req, res) => {
   }
 });
 
+app.post('/loginValidation',async (req,res)=>{
+  const {username,password} = req.body;
+  const userLog = await prisma.Usuario.findFirst({
+    where:{
+      "username": username,
+      "password": password
+    }
+  });
+  if(userLog){
+  res.json(userLog); 
+  }
+  else{
+    res.send({msg:"No existe el usuario"})
+  }
+})
+
 console.log('Connected to PlanetScale!')
