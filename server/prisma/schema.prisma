@@ -16,15 +16,20 @@ model Usuario {
   surname  String
   mail     String
   reservas Reservas[]
+  estacionamiento Estacionamientos[]
 }
 
 model Estacionamientos {
   ID       Int        @id @default(autoincrement())
+  userID   Int
   adress   String
   type     String
   capacity Int
+  availability Int @default(0)
   reservas Reservas[]
-}
+  usuario Usuario @relation(fields: [userID], references: [ID]) 
+
+  }
 
 model Reservas {
   ID          Int              @id @default(autoincrement())

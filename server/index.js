@@ -54,4 +54,18 @@ app.post('/loginValidation',async (req,res)=>{
   }
 })
 
+app.post('/CreateParking', async (req,res) =>{
+  const { adress, type, capacity} = req.body;
+  const add = await prisma.estacionamientos.create({
+    data: {
+      "adress": adress,
+      "type": type,
+      "capacity": capacity
+    }
+  })
+  if(add){
+    res.json(add);
+  }
+})
+
 console.log('Connected to PlanetScale!')
