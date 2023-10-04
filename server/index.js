@@ -20,7 +20,7 @@ app.listen(PORT, () => {
 });
 
 app.post('/CreateUser', async (req, res) => {
-  const {username, password, name, surname, mail} = req.body; 
+  const { username, password, name, surname, mail } = req.body;
   try {
     const user = await prisma.Usuario.create({
       data: {
@@ -38,34 +38,42 @@ app.post('/CreateUser', async (req, res) => {
   }
 });
 
-app.post('/loginValidation',async (req,res)=>{
-  const {username,password} = req.body;
+app.post('/loginValidation', async (req, res) => {
+  const { username, password } = req.body;
   const userLog = await prisma.Usuario.findFirst({
-    where:{
+    where: {
       "username": username,
       "password": password
     }
   });
-  if(userLog){
-  res.json(userLog); 
+  if (userLog) {
+    res.json(userLog);
   }
-  else{
-    res.send({msg:"No existe el usuario"})
+  else {
+    res.send({ msg: "No existe el usuario" })
   }
 })
 
-app.post('/CreateParking', async (req,res) =>{
-  const { adress, type, capacity} = req.body;
-  const add = await prisma.estacionamientos.create({
-    data: {
-      "adress": adress,
-      "type": type,
-      "capacity": capacity
-    }
-  })
-  if(add){
+app.post('/CreateParking', async (req, res) => {
+  const { adress, type, capacity, userID } = req.body;
+  try {
+    const add = await prisma.Estacionamientos.create({
+      data: {
+        adress,
+        type,
+        capacity,
+        usuario: {
+          connect: {
+            ID: userID
+          }
+        }
+      }
+    });
     res.json(add);
+  } catch (error) {
+    console.error('Error al crear el Parking:', error);
+    res.status(500).json({ error: 'Error al crear el Parking' });
   }
-})
+});
 
 console.log('Connected to PlanetScale!')
