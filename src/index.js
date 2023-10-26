@@ -64,7 +64,7 @@ app.post('/CreateParking', async (req, res) => {
         capacity,
         usuario: {
           connect: {
-            ID: userID
+            ID: userID  
           }
         }
       }
