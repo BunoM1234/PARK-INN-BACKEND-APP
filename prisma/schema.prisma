@@ -12,8 +12,6 @@ model Usuario {
   ID              Int                @id @default(autoincrement())
   username        String             @unique
   password        String
-  name            String
-  surname         String
   mail            String
   reservas        Reservas[]
   estacionamiento Estacionamientos[]
