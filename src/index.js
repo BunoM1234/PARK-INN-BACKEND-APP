@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const express = require("express");
 const mysql = require('mysql')
+var cors = require('cors');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 require('dotenv').config()
@@ -10,6 +11,7 @@ const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/api", (req, res) => {
   res.json({ message: "Hola desde el servidor!" });
