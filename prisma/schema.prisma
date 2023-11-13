@@ -22,6 +22,7 @@ model Estacionamientos {
   userID       Int
   adress       String
   type         String
+  contact      String     @default("")
   capacity     Int
   availability Int        @default(0)
   reservas     Reservas[]
