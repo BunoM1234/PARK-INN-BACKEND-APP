@@ -13,14 +13,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-
-app.use(function(req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
-  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 app.get("/api", (req, res) => {
   res.json({ message: "Hola desde el servidor!" });
 });
@@ -84,5 +76,10 @@ app.post('/CreateParking', async (req, res) => {
 
 console.log('Connected to PlanetScale!')
 
-
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
