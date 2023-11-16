@@ -58,16 +58,16 @@ app.post('/loginValidation', async (req, res) => {
 
 app.post('/CreateParking', async (req, res) => {
   const { adress, type, capacity, contact} = req.body;
-  const userLog = await prisma.Estacionamientos.create({
+  const creacion = await prisma.Estacionamientos.create({
     data: {
-      "adress": adress,
-      "type": type,
-      "capacity": capacity,
-      "contact": contact
+      adress: adress,
+      type: type,
+      capacity: capacity,
+      contact: contact
     }
   });
-  if (userLog) {
-    res.json(userLog);
+  if (creacion) {
+    res.json(creacion);
   }
   else {
     res.status(404).send("No existe el usuario");
