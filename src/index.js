@@ -59,7 +59,7 @@ app.post('/loginValidation', async (req, res) => {
 app.post('/CreateParking', async (req, res) => {
   const { adress, type, capacity, contact} = req.body;
   const userLog = await prisma.Estacionamientos.create({
-    where: {
+    data: {
       "adress": adress,
       "type": type,
       "capacity": capacity,
