@@ -70,7 +70,7 @@ app.post('/CreateParking', async (req, res) => {
     res.json(creacion);
   }
   else {
-    res.status(404).send("No existe el usuario");
+    res.status(500).send("No existe el usuario");
   }
 });
 
