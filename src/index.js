@@ -9,6 +9,8 @@ require('dotenv').config()
 // const mysql = require('mysql2')
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
+
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -54,25 +56,42 @@ app.post('/loginValidation', async (req, res) => {
   }
 });
 
-
-
 app.post('/CreateParking', async (req, res) => {
-  const { adress, type, capacity, contact } = req.body;
-  try {
-    const add = await prisma.Estacionamientos.create({
-      data: {
-        adress,
-        type,
-        capacity,
-        contact
-      }
-      });
-    res.json(add);
-  } catch (error) {
-    console.error('Error al crear el Parking:', error);
-    res.status(500).json({ error: 'Error al crear el Parking' });
+  const { adress, type, capacity, contact} = req.body;
+  const userLog = await prisma.Estacionamientos.findFirst({
+    where: {
+      "adress": adress,
+      "type": type,
+      "capacity": capacity,
+      "contact": contact
+    }
+  });
+  if (userLog) {
+    res.json(userLog);
+  }
+  else {
+    res.status(404).send("No existe el usuario");
   }
 });
+
+// app.post('/CreateParking', async (req, res) => {
+//   const { adress, type, capacity, contact } = req.body;
+//   try {
+//     const add = await prisma.Estacionamientos.create({
+//       data: {
+//         adress,
+//         type,
+//         capacity,
+//         contact
+//       }
+      
+//       });
+//     res.json(add);
+//   } catch (error) {
+//     console.error('Error al crear el Parking:', error);
+//     res.status(500).json({ error: 'Error al crear el Parking' });
+//   }
+// });
 
 console.log('Connected to PlanetScale!')
 
