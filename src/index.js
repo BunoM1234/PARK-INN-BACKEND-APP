@@ -9,6 +9,8 @@ require('dotenv').config()
 // const mysql = require('mysql2')
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
+
+
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
@@ -50,31 +52,47 @@ app.post('/loginValidation', async (req, res) => {
     res.json(userLog);
   }
   else {
-    res.send({ msg: "No existe el usuario" })
-  }
-})
-
-app.post('/CreateParking', async (req, res) => {
-  const { adress, type, capacity, userID } = req.body;
-  try {
-    const add = await prisma.Estacionamientos.create({
-      data: {
-        adress,
-        type,
-        capacity,
-        usuario: {
-          connect: {
-            ID: userID  
-          }
-        }
-      }
-    });
-    res.json(add);
-  } catch (error) {
-    console.error('Error al crear el Parking:', error);
-    res.status(500).json({ error: 'Error al crear el Parking' });
+    res.status(404).send("No existe el usuario");
   }
 });
+
+app.post('/CreateParking', async (req, res) => {
+  const { adress, type, capacity, contact, userID} = req.body;
+  const creacion = await prisma.Estacionamientos.create({
+    data: {
+      adress: adress,
+      type: type,
+      capacity: capacity,
+      contact: contact,
+      userID: userID
+    }
+  });
+  if (creacion) {
+    res.json(creacion);
+  }
+  else {
+    res.status(404).send("No existe el usuario");
+  }
+});
+
+// app.post('/CreateParking', async (req, res) => {
+//   const { adress, type, capacity, contact } = req.body;
+//   try {
+//     const add = await prisma.Estacionamientos.create({
+//       data: {
+//         adress,
+//         type,
+//         capacity,
+//         contact
+//       }
+      
+//       });
+//     res.json(add);
+//   } catch (error) {
+//     console.error('Error al crear el Parking:', error);
+//     res.status(500).json({ error: 'Error al crear el Parking' });
+//   }
+// });
 
 console.log('Connected to PlanetScale!')
 
@@ -84,3 +102,4 @@ app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
