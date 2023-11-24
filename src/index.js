@@ -6,7 +6,6 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 require('dotenv').config()
-// const mysql = require('mysql2')
 const connection = mysql.createConnection(process.env.DATABASE_URL)
 
 
@@ -57,11 +56,12 @@ app.post('/loginValidation', async (req, res) => {
 });
 
 app.post('/CreateParking', async (req, res) => {
-  const { adress, type, capacity, contact, userID} = req.body;
+  const { adress, type, capacity, contact, barrio, userID} = req.body;
   const creacion = await prisma.Estacionamientos.create({
     data: {
       adress: adress,
       type: type,
+      barrio: barrio,
       capacity: capacity,
       contact: contact,
       userID: userID
@@ -75,24 +75,62 @@ app.post('/CreateParking', async (req, res) => {
   }
 });
 
-// app.post('/CreateParking', async (req, res) => {
-//   const { adress, type, capacity, contact } = req.body;
-//   try {
-//     const add = await prisma.Estacionamientos.create({
-//       data: {
-//         adress,
-//         type,
-//         capacity,
-//         contact
-//       }
-      
-//       });
-//     res.json(add);
-//   } catch (error) {
-//     console.error('Error al crear el Parking:', error);
-//     res.status(500).json({ error: 'Error al crear el Parking' });
-//   }
-// });
+app.post('/GetParkUser', async (req, res) => {
+  const { userID } = req.body;
+  const parkUser = await prisma.Estacionamientos.findMany({
+    where: {
+      userID: userID
+    }
+  });
+  if (parkUser) {
+    res.json(parkUser);
+  }
+  else {
+    res.status(404).send("No existe el usuario");
+  }
+}); 
+
+app.post('/UpdateParking', async (req, res) => {
+  const { adress, type, capacity, contact, barrio, userID, id} = req.body;
+  const update = await prisma.Estacionamientos.update({
+    where: {
+      ID: id
+    },
+    data: {
+      adress: adress,
+      type: type,
+      capacity: capacity,
+      barrio: barrio,
+      contact: contact,
+      userID: userID
+    }
+  });
+  if (update) {
+    res.json(update);
+  }
+  else {
+    res.status(404).send("Error al actualizar el estacionamiento");
+  }
+});
+
+app.post('/GetParkBarrio', async (req, res) => {
+  const { barrio } = req.body;
+  const parkBarrio = await prisma.Estacionamientos.findMany({
+    where: {
+      barrio: barrio
+    }
+  });
+  if (parkBarrio) {
+    res.json(parkBarrio);
+  }
+  else {
+    res.status(404).send("No existe el usuario");
+  }
+}
+);
+
+
+module.exports = app;
 
 console.log('Connected to PlanetScale!')
 
