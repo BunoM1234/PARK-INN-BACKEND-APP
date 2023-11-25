@@ -19,12 +19,13 @@ model Usuario {
 
 model Estacionamientos {
   ID           Int        @id @default(autoincrement())
-  userID       Int
   adress       String
   type         String
-  contact      String     @default("")
   capacity     Int
+  barrio      String   @default("")
   availability Int        @default(0)
+  userID       Int
+  contact      String     @default("")
   reservas     Reservas[]
   usuario      Usuario    @relation(fields: [userID], references: [ID])
 
