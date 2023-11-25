@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -22,10 +23,10 @@ model Estacionamientos {
   adress       String
   type         String
   capacity     Int
-  barrio      String   @default("")
   availability Int        @default(0)
   userID       Int
   contact      String     @default("")
+  barrio       String     @default("")
   reservas     Reservas[]
   usuario      Usuario    @relation(fields: [userID], references: [ID])
 
