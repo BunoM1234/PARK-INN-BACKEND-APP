@@ -129,6 +129,21 @@ app.post('/GetParkBarrio', async (req, res) => {
 }
 );
 
+app.post('/DeletePark', async (req, res) => {
+  const { id } = req.body;
+  const deletePark = await prisma.Estacionamientos.delete({
+    where: {
+      ID: id
+    }
+  });
+  if (deletePark) {
+    res.json(deletePark);
+  }
+  else {
+    res.status(404).send("Error al eliminar el estacionamiento");
+  }
+}
+);  
 
 module.exports = app;
 
